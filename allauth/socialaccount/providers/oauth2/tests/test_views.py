@@ -12,6 +12,7 @@ from allauth.socialaccount.adapter import get_adapter
         (True, False, True),
         (True, True, False),
         (False, False, False),
+        (None, False, False),
     ],
 )
 def test_samesite_strict(
@@ -23,7 +24,8 @@ def test_samesite_strict(
     expect_redirect,
     db,
 ):
-    settings.SESSION_COOKIE_SAMESITE = "Strict" if samesite_strict else "Lax"
+    if samesite_strict is not None:
+        settings.SESSION_COOKIE_SAMESITE = "Strict" if samesite_strict else "Lax"
     query = "?state=123"
     resp = client.get(
         reverse("google_callback") + query + ("&_redir" if did_already_redirect else "")
