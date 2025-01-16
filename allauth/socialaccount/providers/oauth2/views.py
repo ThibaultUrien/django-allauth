@@ -165,6 +165,7 @@ class OAuth2CallbackView(OAuth2View):
     def _redirect_strict_samesite(self, request, provider):
         if (
             "_redir" in request.GET
+            or not settings.SESSION_COOKIE_SAMESITE
             or settings.SESSION_COOKIE_SAMESITE.lower() != "strict"
             or request.method != "GET"
         ):
